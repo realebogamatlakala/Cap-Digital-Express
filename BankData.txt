@@ -1,0 +1,14 @@
+Realeboga:640.0
+Realeboga:2140.0
+Realeboga:1890.0
+Realeboga:1790.0
+Realeboga:1890.0
+Realeboga:1390.0
+Realeboga:1590.0
+Realeboga:2090.0
+Realeboga:590.0
+Realeboga:592.5
+Sam:500.0
+Sam:500.5
+Sam:250.45
+Realeboga:500.0
