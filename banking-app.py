@@ -1,6 +1,7 @@
 #imports
 from tkinter import *
 import os
+from tkinter import filedialog
 from PIL import ImageTk, Image
 
 #Main Screen
@@ -36,14 +37,20 @@ def finish_reg():
 def register():
     #Vars
     global temp_name
+    global temp_image_path
     global temp_age
     global temp_gender
+    global temp_accountNo
     global temp_password
     global notif
+
     temp_name = StringVar()
+    temp_image_path = StringVar()
     temp_age = StringVar()
     temp_gender = StringVar()
     temp_password = StringVar()
+    temp_accountNo = StringVar()
+
     
     #Register Screen
     register_screen = Toplevel(master)
@@ -54,18 +61,25 @@ def register():
     Label(register_screen, text="Name", font=('Calibri',12)).grid(row=1,sticky=W)
     Label(register_screen, text="Age", font=('Calibri',12)).grid(row=2,sticky=W)
     Label(register_screen, text="Gender", font=('Calibri',12)).grid(row=3,sticky=W)
-    Label(register_screen, text="Password", font=('Calibri',12)).grid(row=4,sticky=W)
+    Label(register_screen,text="Account No:", font=('Calibri',12)).grid(row=4,sticky=W)
+    Label(register_screen, text="Password", font=('Calibri',12)).grid(row=5,sticky=W)
     notif = Label(register_screen, font=('Calibri',12))
     notif.grid(row=6,sticky=N,pady=10)
+    Label(register_screen, text="Image", font=('Calibri', 12)).grid(row=5, sticky=W)
+
 
     #Entries
     Entry(register_screen,textvariable=temp_name).grid(row=1,column=0)
     Entry(register_screen,textvariable=temp_age).grid(row=2,column=0)
     Entry(register_screen,textvariable=temp_gender).grid(row=3,column=0)
-    Entry(register_screen,textvariable=temp_password,show="*").grid(row=4,column=0)
+    Entry(register_screen,textvariable=temp_accountNo).grid(row=4,column=0)
+    Entry(register_screen,textvariable=temp_password,show="*").grid(row=5,column=0)
+    image_entry = Entry(register_screen, textvariable=temp_image_path, state='disabled')
+    image_entry.grid(row=5, column=1)
 
     #Buttons
-    Button(register_screen, text="Register", command = finish_reg, font=('Calibri',12)).grid(row=5,sticky=N,pady=10)
+    Button(register_screen, text="Register", command = finish_reg, font=('Calibri',12)).grid(row=7,sticky=N,pady=10)
+    Button(register_screen, text="Browse", command=browse_image).grid(row=5, column=2)
 
 def login_session():
     global login_name
@@ -85,41 +99,46 @@ def login_session():
                 account_dashboard = Toplevel(master)
                 account_dashboard.title('Dashboard')
                 #Labels
-                Label(account_dashboard, text="Account Dashboard", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-                Label(account_dashboard, text="Welcome "+name, font=('Calibri',12)).grid(row=1,sticky=N,pady=5)
+                Label(account_dashboard, text="Account Dashboard", font=('Calibri',12)).grid(row=0,sticky=N,pady=10, padx=150) 
+                Label(account_dashboard, text="Welcome " +name+ "\n \n Would you like to make a transaction?", font=('Calibri',12)).grid(row=1,sticky=N,pady=5, padx=150)
                 #Buttons
-                Button(account_dashboard, text="Personal Details",font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N,padx=10)
-                Button(account_dashboard, text="Deposit",font=('Calibri',12),width=30,command=deposit).grid(row=3,sticky=N,padx=10)
-                Button(account_dashboard, text="Withdraw",font=('Calibri',12),width=30,command=withdraw).grid(row=4,sticky=N,padx=10)
+                Button(account_dashboard, text="Personal Details",font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N, padx=150)
+                Button(account_dashboard, text="Deposit",font=('Calibri',12),width=30,command=deposit).grid(row=3,sticky=N, padx=150)
+                Button(account_dashboard, text="Withdraw",font=('Calibri',12),width=30,command=withdraw).grid(row=4,sticky=N, padx=150)
                 Label(account_dashboard).grid(row=5,sticky=N,pady=10)
                 return
             else:
                 login_notif.config(fg="red", text="Password incorrect!!")
                 return
-    login_notif.config(fg="red", text="No account found !!")
+    login_notif.config(fg="red", text="No account found!!!")
 def update_balance_label():
     global login_name, balance_label
     file = open(login_name, 'r')
     file_data = file.read()
     user_details = file_data.split('\n')
     details_balance = float(user_details[4])
-    balance_label.config(text=f"Balance: £{details_balance}")
-    
+    balance_label.config(text=f"Balance: R{details_balance}")
+
+def browse_image():
+        filename = filedialog.askopenfilename(initialdir="/", title="Select Image", filetypes=(("Image files", "*.png *.jpg *.jpeg"), ("All files", "*.*")))
+        if filename:
+            temp_image_path.set(filename)
+
 def deposit():
     global login_name
     
     def finish_deposit():
         deposit_input = deposit_entry.get()
         if not deposit_input:
-            deposit_notif.config(fg="red", text="Please enter a valid amount.")
+            deposit_notif.config(fg="red", text="Please enter an amount higher than R10.")
             return
         try:
             deposit_amount = float(deposit_input)
             if deposit_amount <= 0:
-                deposit_notif.config(fg="red", text="Invalid amount. Please enter a positive number.")
+                deposit_notif.config(fg="red", text="Invalid amount. Please enter a positive amount.")
                 return
         except ValueError:
-            deposit_notif.config(fg="red", text="Invalid input. Please enter a valid number.")
+            deposit_notif.config(fg="red", text="Invalid input. Please enter a valid amount.")
             return
         
         # Proceed with the deposit operation
@@ -145,7 +164,7 @@ def deposit():
         with open("TransactionLog.txt", "a") as log_file:
             log_file.write(f"Deposit: {deposit_amount}\n")
         
-        deposit_notif.config(fg="green", text=(f"{login_name} Deposited {deposit_amount} successfully!!!\n New Balance: {new_balance}"))
+        deposit_notif.config(fg="green", text=(f"{login_name} deposited R{deposit_amount} successfully!!!\n New Balance: R{new_balance}"))
     
     deposit_screen = Toplevel(master)
     deposit_screen.title("Deposit")
@@ -164,15 +183,15 @@ def withdraw():
     def finish_withdrawal():
         withdrawal_input = withdrawal_entry.get()
         if not withdrawal_input:
-            withdrawal_notif.config(fg="red", text="Please enter a valid amount.")
+            withdrawal_notif.config(fg="red", text="Please enter a valid withdrawal amount.")
             return
         try:
             withdrawal_amount = float(withdrawal_input)
             if withdrawal_amount <= 0:
-                withdrawal_notif.config(fg="red", text="Invalid amount. Please enter a positive number.")
+                withdrawal_notif.config(fg="red", text="Invalid amount. Withdrawal amount cannot be less than 0.")
                 return
         except ValueError:
-            withdrawal_notif.config(fg="red", text="Invalid input. Please enter a valid number.")
+            withdrawal_notif.config(fg="red", text="Invalid input. Withdrawal cannot be bigger than balance!.")
             return
         
         # Proceed with the withdrawal operation
@@ -205,12 +224,12 @@ def withdraw():
         with open("TransactionLog.txt", "a") as log_file:
             log_file.write(f"Withdrawal: {withdrawal_amount}\n")
         
-        withdrawal_notif.config(fg="green", text=(f"{login_name} withdrew {withdrawal_amount} successfully!!!\n New Balance: {new_balance}"))
+        withdrawal_notif.config(fg="green", text=(f"{login_name} withdrew R{withdrawal_amount} successfully!!!\n New Balance: R{new_balance}"))
 
     withdrawal_screen = Toplevel(master)
     withdrawal_screen.title("Withdrawal")
     
-    Label(withdrawal_screen, text="How much would you like to 'withdraw':").grid(row=0, column=0, padx=10, pady=5)
+    Label(withdrawal_screen, text="How much would you like to withdraw:").grid(row=0, column=0, padx=10, pady=5)
     withdrawal_entry = Entry(withdrawal_screen)
     withdrawal_entry.grid(row=0, column=1, padx=10, pady=5)
     withdrawal_button = Button(withdrawal_screen, text="Withdraw", command=finish_withdrawal)
@@ -236,7 +255,7 @@ def personal_details():
     Label(personal_details_screen, text="Name : "+details_name, font=('Calibri',12)).grid(row=1,sticky=W)
     Label(personal_details_screen, text="Age : "+details_age, font=('Calibri',12)).grid(row=2,sticky=W)
     Label(personal_details_screen, text="Gender : "+details_gender, font=('Calibri',12)).grid(row=3,sticky=W)
-    Label(personal_details_screen, text="Balance :£"+details_balance, font=('Calibri',12)).grid(row=4,sticky=W)
+    Label(personal_details_screen, text="Balance :R"+details_balance, font=('Calibri',12)).grid(row=4,sticky=W)
 def login():
     #Vars
     global temp_login_name
