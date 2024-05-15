@@ -27,3 +27,4 @@ Realeboga:90.0
 Realeboga:590.0
 Realeboga:490.0
 Realeboga:400.0
+Bukho:5000.0

@@ -26,3 +26,9 @@ Deposit: 50.0
 Deposit: 500.0
 Withdrawal: 100.0
 Withdrawal: 90.0
+Deposit: 5000.0
+Realeboga: Deposit: 25000.0
+Realeboga: Withdrawal: 10000.0
+Realeboga: Deposit: 29000.0
+Realeboga: Withdrawal: 2662.0
+Bukho: Deposit: 1964.0
