@@ -1,14 +1,17 @@
 #imports
-from tkinter import *
+import random
 import os
+from tkinter import *
 from tkinter import filedialog
-from PIL import ImageTk, Image
+from PIL import Image, ImageTk
 
-#Main Screen
+# Main Screen
 master = Tk()
 master.title('Banking App')
+master.geometry('450x600')
 
-#Functions
+
+# Functions
 def finish_reg():
     name = temp_name.get()
     age = temp_age.get()
@@ -17,25 +20,38 @@ def finish_reg():
     all_accounts = os.listdir()
 
     if name == "" or age == "" or gender == "" or password == "":
-        notif.config(fg="red",text="All fields requried * ")
+        notif.config(fg="red", text="All fields required *")
         return
 
-    for name_check in all_accounts:
-        if name == name_check:
-            notif.config(fg="red",text="Account already exists")
-            return
-        else:
-            new_file = open(name,"w")
-            new_file.write(name+'\n')
-            new_file.write(password+'\n')
-            new_file.write(age+'\n')
-            new_file.write(gender+'\n')
+    if name in all_accounts:
+        notif.config(fg="red", text="Account already exists")
+        return
+    else:
+        with open(name, "w") as new_file:
+            new_file.write(name + '\n')
+            new_file.write(password + '\n')
+            new_file.write(age + '\n')
+            new_file.write(gender + '\n')
             new_file.write('0')
-            new_file.close()
-            notif.config(fg="green", text="Account has been created")
+        notif.config(fg="green", text="Account has been created")
+
+def generate_password(event=None):
+    characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*_-+='
+    password = "".join(random.sample(characters, 12))
+    temp_password.set(password)
+
+def browse_image():
+    file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.jpeg;*.png;*.bmp;*.gif")])
+    if file_path:
+        temp_image_path.set(file_path)
+        # Open the image using PIL and display it (optional)
+        img = Image.open(file_path)
+        img.thumbnail((100, 100))  # Resize for display
+        img = ImageTk.PhotoImage(img)
+        image_label.config(image=img)
+        image_label.image = img
 
 def register():
-    #Vars
     global temp_name
     global temp_image_path
     global temp_age
@@ -43,6 +59,7 @@ def register():
     global temp_accountNo
     global temp_password
     global notif
+    global image_label
 
     temp_name = StringVar()
     temp_image_path = StringVar()
@@ -51,35 +68,40 @@ def register():
     temp_password = StringVar()
     temp_accountNo = StringVar()
 
-    
-    #Register Screen
+    # Register Screen
     register_screen = Toplevel(master)
     register_screen.title('Register')
+    register_screen.geometry('400x500')
 
-    #Labels
-    Label(register_screen, text="Please enter your details below to register", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-    Label(register_screen, text="Name", font=('Calibri',12)).grid(row=1,sticky=W)
-    Label(register_screen, text="Age", font=('Calibri',12)).grid(row=2,sticky=W)
-    Label(register_screen, text="Gender", font=('Calibri',12)).grid(row=3,sticky=W)
-    Label(register_screen,text="Account No:", font=('Calibri',12)).grid(row=4,sticky=W)
-    Label(register_screen, text="Password", font=('Calibri',12)).grid(row=5,sticky=W)
-    notif = Label(register_screen, font=('Calibri',12))
-    notif.grid(row=6,sticky=N,pady=10)
-    Label(register_screen, text="Image", font=('Calibri', 12)).grid(row=5, sticky=W)
+    # Labels
+    Label(register_screen, text="Please enter your details below to register", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
+    Label(register_screen, text="Name:", font=('Calibri', 12)).grid(row=1, sticky=W)
+    Label(register_screen, text="Age:", font=('Calibri', 12)).grid(row=2, sticky=W)
+    Label(register_screen, text="Gender:", font=('Calibri', 12)).grid(row=3, sticky=W)
+    Label(register_screen, text="Account No:", font=('Calibri', 12)).grid(row=4, sticky=W)
+    Label(register_screen, text="Password:", font=('Calibri', 12)).grid(row=5, sticky=W,)
+    notif = Label(register_screen, font=('Calibri', 12))
+    notif.grid(row=7, sticky=N, pady=10)
+    Label(register_screen, text="Image", font=('Calibri', 12)).grid(row=6, sticky=W)
 
-
-    #Entries
-    Entry(register_screen,textvariable=temp_name).grid(row=1,column=0)
-    Entry(register_screen,textvariable=temp_age).grid(row=2,column=0)
-    Entry(register_screen,textvariable=temp_gender).grid(row=3,column=0)
-    Entry(register_screen,textvariable=temp_accountNo).grid(row=4,column=0)
-    Entry(register_screen,textvariable=temp_password,show="*").grid(row=5,column=0)
+    # Entries
+    Entry(register_screen, textvariable=temp_name).grid(row=1, column=0, padx=20)
+    Entry(register_screen, textvariable=temp_age).grid(row=2, column=0, padx=20)
+    Entry(register_screen, textvariable=temp_gender).grid(row=3, column=0, padx=20)
+    Entry(register_screen, textvariable=temp_accountNo).grid(row=4, column=0,)
+    password_entry = Entry(register_screen, textvariable=temp_password, show="")
+    password_entry.grid(row=5, column=0, padx=20)
+    password_entry.bind("<Button-1>", generate_password)  # Bind the click event to generate password
     image_entry = Entry(register_screen, textvariable=temp_image_path, state='disabled')
-    image_entry.grid(row=5, column=1)
+    image_entry.grid(row=6, column=0, padx=20)
 
-    #Buttons
-    Button(register_screen, text="Register", command = finish_reg, font=('Calibri',12)).grid(row=7,sticky=N,pady=10)
-    Button(register_screen, text="Browse", command=browse_image).grid(row=5, column=2)
+    # Image label for displaying the selected image
+    image_label = Label(register_screen)
+    image_label.grid(row=6, column=2)
+
+    # Buttons
+    Button(register_screen, text="Register", command=finish_reg, font=('Calibri', 12)).grid(row=8, sticky=N, pady=10)
+    Button(register_screen, text="Browse", command=browse_image).grid(row=6, column=3)
 
 def login_session():
     global login_name
@@ -89,40 +111,34 @@ def login_session():
 
     for name in all_accounts:
         if name == login_name:
-            file = open(name,"r")
-            file_data = file.read()
-            file_data = file_data.split('\n')
-            password  = file_data[1]
-            #Account Dashboard
-            if login_password == password:
-                login_screen.destroy()
-                account_dashboard = Toplevel(master)
-                account_dashboard.title('Dashboard')
-                #Labels
-                Label(account_dashboard, text="Account Dashboard", font=('Calibri',12)).grid(row=0,sticky=N,pady=10, padx=150) 
-                Label(account_dashboard, text="Welcome " +name+ "\n \n Would you like to make a transaction?", font=('Calibri',12)).grid(row=1,sticky=N,pady=5, padx=150)
-                #Buttons
-                Button(account_dashboard, text="Personal Details",font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N, padx=150)
-                Button(account_dashboard, text="Deposit",font=('Calibri',12),width=30,command=deposit).grid(row=3,sticky=N, padx=150)
-                Button(account_dashboard, text="Withdraw",font=('Calibri',12),width=30,command=withdraw).grid(row=4,sticky=N, padx=150)
-                Label(account_dashboard).grid(row=5,sticky=N,pady=10)
-                return
-            else:
-                login_notif.config(fg="red", text="Password incorrect!!")
-                return
+            with open(name, "r") as file:
+                file_data = file.read().split('\n')
+                password = file_data[1]
+                # Account Dashboard
+                if login_password == password:
+                    login_screen.destroy()
+                    account_dashboard = Toplevel(master)
+                    account_dashboard.title('Dashboard')
+                    # Labels
+                    Label(account_dashboard, text="Account Dashboard", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10, padx=150) 
+                    Label(account_dashboard, text="Welcome " + name + "\n \n Would you like to make a transaction?", font=('Calibri', 12)).grid(row=1, sticky=N, pady=5, padx=150)
+                    # Buttons
+                    Button(account_dashboard, text="Personal Details", font=('Calibri', 12), width=30, command=personal_details).grid(row=2, sticky=N, padx=150)
+                    Button(account_dashboard, text="Deposit", font=('Calibri', 12), width=30, command=deposit).grid(row=3, sticky=N, padx=150)
+                    Button(account_dashboard, text="Withdraw", font=('Calibri', 12), width=30, command=withdraw).grid(row=4, sticky=N, padx=150)
+                    Label(account_dashboard).grid(row=5, sticky=N, pady=10)
+                    return
+                else:
+                    login_notif.config(fg="red", text="Password incorrect!!")
+                    return
     login_notif.config(fg="red", text="No account found!!!")
+
 def update_balance_label():
     global login_name, balance_label
-    file = open(login_name, 'r')
-    file_data = file.read()
-    user_details = file_data.split('\n')
-    details_balance = float(user_details[4])
-    balance_label.config(text=f"Balance: R{details_balance}")
-
-def browse_image():
-        filename = filedialog.askopenfilename(initialdir="/", title="Select Image", filetypes=(("Image files", "*.png *.jpg *.jpeg"), ("All files", "*.*")))
-        if filename:
-            temp_image_path.set(filename)
+    with open(login_name, 'r') as file:
+        file_data = file.read().split('\n')
+        details_balance = float(file_data[4])
+        balance_label.config(text=f"Balance: R{details_balance}")
 
 def deposit():
     global login_name
@@ -130,7 +146,7 @@ def deposit():
     def finish_deposit():
         deposit_input = deposit_entry.get()
         if not deposit_input:
-            deposit_notif.config(fg="red", text="Please enter an amount higher than R10.")
+            deposit_notif.config(fg="red", text="Please enter an amount.")
             return
         try:
             deposit_amount = float(deposit_input)
@@ -142,30 +158,19 @@ def deposit():
             return
         
         # Proceed with the deposit operation
-        file = open(login_name, 'r')
-        file_data = file.read()
-        user_details = file_data.split('\n')
-        details_balance = float(user_details[4])
+        with open(login_name, 'r') as file:
+            user_details = file.read().split('\n')
+            details_balance = float(user_details[4])
         new_balance = details_balance + deposit_amount
-        file.close()
-        file = open(login_name, 'w')
-        file.write(user_details[0]+'\n')
-        file.write(user_details[1]+'\n')
-        file.write(user_details[2]+'\n')
-        file.write(user_details[3]+'\n')
-        file.write(str(new_balance))
-        file.close()
-        
-        # Update BankData.txt with new balance
-        with open("BankData.txt", "a") as bank_file:
-            bank_file.write(f"{login_name}:{new_balance}\n")
-        
-        # Log transaction in TransactionLog.txt
-        with open("TransactionLog.txt", "a") as log_file:
-            log_file.write(f"Deposit: {deposit_amount}\n")
+        with open(login_name, 'w') as file:
+            file.write(user_details[0]+'\n')
+            file.write(user_details[1]+'\n')
+            file.write(user_details[2]+'\n')
+            file.write(user_details[3]+'\n')
+            file.write(str(new_balance))
         
         deposit_notif.config(fg="green", text=(f"{login_name} deposited R{deposit_amount} successfully!!!\n New Balance: R{new_balance}"))
-    
+
     deposit_screen = Toplevel(master)
     deposit_screen.title("Deposit")
     
@@ -174,7 +179,7 @@ def deposit():
     deposit_entry.grid(row=0, column=1, padx=10, pady=5)
     deposit_button = Button(deposit_screen, text="Deposit", command=finish_deposit)
     deposit_button.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
-    deposit_notif = Label(deposit_screen, font=('Calibri',12))
+    deposit_notif = Label(deposit_screen, font=('Calibri', 12))
     deposit_notif.grid(row=2, column=0, columnspan=2, padx=10, pady=5)
 
 def withdraw():
@@ -195,34 +200,21 @@ def withdraw():
             return
         
         # Proceed with the withdrawal operation
-        file = open(login_name, 'r')
-        file_data = file.read()
-        user_details = file_data.split('\n')
-        details_balance = float(user_details[4])
+        with open(login_name, 'r') as file:
+            user_details = file.read().split('\n')
+            details_balance = float(user_details[4])
         
         if withdrawal_amount > details_balance:
             withdrawal_notif.config(fg="red", text="Insufficient funds.")
             return
         
         new_balance = details_balance - withdrawal_amount
-        file.close()
-        
-        # Update user's account file with the new balance
-        file = open(login_name, 'w')
-        file.write(user_details[0]+'\n')
-        file.write(user_details[1]+'\n')
-        file.write(user_details[2]+'\n')
-        file.write(user_details[3]+'\n')
-        file.write(str(new_balance))
-        file.close()
-        
-        # Update BankData.txt with new balance
-        with open("BankData.txt", "a") as bank_file:
-            bank_file.write(f"{login_name}:{new_balance}\n")
-        
-        # Log transaction in TransactionLog.txt
-        with open("TransactionLog.txt", "a") as log_file:
-            log_file.write(f"Withdrawal: {withdrawal_amount}\n")
+        with open(login_name, 'w') as file:
+            file.write(user_details[0]+'\n')
+            file.write(user_details[1]+'\n')
+            file.write(user_details[2]+'\n')
+            file.write(user_details[3]+'\n')
+            file.write(str(new_balance))
         
         withdrawal_notif.config(fg="green", text=(f"{login_name} withdrew R{withdrawal_amount} successfully!!!\n New Balance: R{new_balance}"))
 
@@ -234,63 +226,63 @@ def withdraw():
     withdrawal_entry.grid(row=0, column=1, padx=10, pady=5)
     withdrawal_button = Button(withdrawal_screen, text="Withdraw", command=finish_withdrawal)
     withdrawal_button.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
-    withdrawal_notif = Label(withdrawal_screen, font=('Calibri',12))
+    withdrawal_notif = Label(withdrawal_screen, font=('Calibri', 12))
     withdrawal_notif.grid(row=2, column=0, columnspan=2, padx=10, pady=5)
 
-    
 def personal_details():
-    #Vars
-    file = open(login_name, 'r')
-    file_data = file.read()
-    user_details = file_data.split('\n')
-    details_name = user_details[0]
-    details_age = user_details[2]
-    details_gender = user_details[3]
-    details_balance = user_details[4]
-    #Personal details screen
-    personal_details_screen = Toplevel(master)
-    personal_details_screen.title('Personal Details')
-    #Labels
-    Label(personal_details_screen, text="Personal Details", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-    Label(personal_details_screen, text="Name : "+details_name, font=('Calibri',12)).grid(row=1,sticky=W)
-    Label(personal_details_screen, text="Age : "+details_age, font=('Calibri',12)).grid(row=2,sticky=W)
-    Label(personal_details_screen, text="Gender : "+details_gender, font=('Calibri',12)).grid(row=3,sticky=W)
-    Label(personal_details_screen, text="Balance :R"+details_balance, font=('Calibri',12)).grid(row=4,sticky=W)
+    with open(login_name, 'r') as file:
+        user_details = file.read().split('\n')
+        details_name = user_details[0]
+        details_age = user_details[2]
+        details_gender = user_details[3]
+        details_balance = user_details[4]
+
+        personal_details_screen = Toplevel(master)
+        personal_details_screen.title('Personal Details')
+        personal_details_screen.geometry('300x200')
+
+        Label(personal_details_screen, text="Personal Details", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
+        Label(personal_details_screen, text="Name: " + details_name, font=('Calibri', 12)).grid(row=1, sticky=W)
+        Label(personal_details_screen, text="Age: " + details_age, font=('Calibri', 12)).grid(row=2, sticky=W)
+        Label(personal_details_screen, text="Gender: " + details_gender, font=('Calibri', 12)).grid(row=3, sticky=W)
+        Label(personal_details_screen, text="Balance: R" + details_balance, font=('Calibri', 12)).grid(row=4, sticky=W)
+
 def login():
-    #Vars
     global temp_login_name
     global temp_login_password
     global login_notif
     global login_screen
+
     temp_login_name = StringVar()
     temp_login_password = StringVar()
-    #Login Screen
+
     login_screen = Toplevel(master)
     login_screen.title('Login')
-    #Labels
-    Label(login_screen, text="Login to your account", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-    Label(login_screen, text="Username", font=('Calibri',12)).grid(row=1,sticky=W)
-    Label(login_screen, text="Password", font=('Calibri',12)).grid(row=2,sticky=W)
-    login_notif = Label(login_screen, font=('Calibri',12))
-    login_notif.grid(row=4,sticky=N)
-    #Entry
-    Entry(login_screen, textvariable=temp_login_name).grid(row=1,column=1,padx=5)
-    Entry(login_screen, textvariable=temp_login_password,show="*").grid(row=2,column=1,padx=5)
-    #Button
-    Button(login_screen, text="Login", command=login_session, width=15,font=('Calibri',12)).grid(row=3,sticky=W,pady=5,padx=5)
+    login_screen.geometry('300x250')
 
-#Image import
+    Label(login_screen, text="Login to your account", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
+    Label(login_screen, text="Username", font=('Calibri', 12)).grid(row=1, sticky=W)
+    Label(login_screen, text="Password", font=('Calibri', 12)).grid(row=2, sticky=W)
+    login_notif = Label(login_screen, font=('Calibri', 12))
+    login_notif.grid(row=4, sticky=N)
+    
+    Entry(login_screen, textvariable=temp_login_name).grid(row=1, column=1, padx=5)
+    Entry(login_screen, textvariable=temp_login_password, show="*").grid(row=2, column=1, padx=5)
+    
+    Button(login_screen, text="Login", command=login_session, width=15, font=('Calibri', 12)).grid(row=3, sticky=W, pady=5, padx=5)
+
+# Load and display the image
 img = Image.open('secure.png')
-img = img.resize((150,150))
+img = img.resize((150, 150))
 img = ImageTk.PhotoImage(img)
 
-#Labels
-Label(master, text = "Cap-Digital-Express", font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
-Label(master, text = "Bank Better with CDE Bank! \n The most secure bank in the southern hemisphere!", font=('Calibri',12)).grid(row=1,sticky=N)
-Label(master, image=img).grid(row=2,sticky=N,pady=15)
+# Labels
+Label(master, text="Cap-Digital-Express", font=('Calibri', 14)).grid(row=0, sticky=N, pady=10)
+Label(master, text="Bank Better with CDE Bank! \n The most secure bank in the southern hemisphere!", font=('Calibri', 12)).grid(row=1, sticky=N)
+Label(master, image=img).grid(row=2, sticky=N, pady=15)
 
-#Buttons
-Button(master, text="Register", font=('Calibri',12),width=20,command=register).grid(row=3,sticky=N)
-Button(master, text="Login", font=('Calibri',12),width=20,command=login).grid(row=4,sticky=N,pady=10)
+# Buttons
+Button(master, text="Register", font=('Calibri', 12), width=20, command=register).grid(row=3, sticky=N)
+Button(master, text="Login", font=('Calibri', 12), width=20, command=login).grid(row=4, sticky=N, pady=10)
 
 master.mainloop()
