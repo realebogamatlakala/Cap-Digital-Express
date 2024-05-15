@@ -32,3 +32,6 @@ Realeboga: Withdrawal: 10000.0
 Realeboga: Deposit: 29000.0
 Realeboga: Withdrawal: 2662.0
 Bukho: Deposit: 1964.0
+Onwaba: Deposit: 48198.0
+Onwaba: Withdrawal: 453.5
+Realeboga: Withdrawal: 2000.0
