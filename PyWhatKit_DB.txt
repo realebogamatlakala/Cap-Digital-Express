@@ -23,3 +23,18 @@ Time: 11:3
 Phone Number: ++27825820880
 Message: Samantha: Deposit: 20000.0Samantha: Withdrawal: 15000.0Samantha: Deposit: 1000.0Samantha: Withdrawal: 256.0Samantha: Deposit: 900.0Samantha: Withdrawal: 200.0Samantha: Withdrawal: 250.0Samantha: Deposit: 810.0Samantha: Withdrawal: 1000.0Samantha: Withdrawal: 100.0Samantha: Deposit: 200.0Samantha: Withdrawal: 100.0Samantha: Deposit: 3600.0Samantha: Withdrawal: 200.0Samantha: Deposit: 55.0Samantha: Deposit: 6.0Samantha: Deposit: 1000.0Samantha: Deposit: 100.0Samantha: Deposit: 22000.0Samantha: Deposit: 10.0Samantha: Withdrawal: 2000.0Samantha: Withdrawal: 19999.0
 --------------------
+Date: 23/5/2024
+Time: 20:24
+Phone Number: +0825820880
+Message: Samantha: Deposit: 20000.0Samantha: Withdrawal: 15000.0Samantha: Deposit: 1000.0Samantha: Withdrawal: 256.0Samantha: Deposit: 900.0Samantha: Withdrawal: 200.0Samantha: Withdrawal: 250.0Samantha: Deposit: 810.0Samantha: Withdrawal: 1000.0Samantha: Withdrawal: 100.0Samantha: Deposit: 200.0Samantha: Withdrawal: 100.0Samantha: Deposit: 3600.0Samantha: Withdrawal: 200.0Samantha: Deposit: 55.0Samantha: Deposit: 6.0Samantha: Deposit: 1000.0Samantha: Deposit: 100.0Samantha: Deposit: 22000.0Samantha: Deposit: 10.0Samantha: Withdrawal: 2000.0Samantha: Withdrawal: 19999.0Sam: Deposit: 200.0
+--------------------
+Date: 23/5/2024
+Time: 20:49
+Phone Number: +0825820880
+Message: Samantha: Deposit: 20000.0Samantha: Withdrawal: 15000.0Samantha: Deposit: 1000.0Samantha: Withdrawal: 256.0Samantha: Deposit: 900.0Samantha: Withdrawal: 200.0Samantha: Withdrawal: 250.0Samantha: Deposit: 810.0Samantha: Withdrawal: 1000.0Samantha: Withdrawal: 100.0Samantha: Deposit: 200.0Samantha: Withdrawal: 100.0Samantha: Deposit: 3600.0Samantha: Withdrawal: 200.0Samantha: Deposit: 55.0Samantha: Deposit: 6.0Samantha: Deposit: 1000.0Samantha: Deposit: 100.0Samantha: Deposit: 22000.0Samantha: Deposit: 10.0Samantha: Withdrawal: 2000.0Samantha: Withdrawal: 19999.0Sam: Deposit: 200.0
+--------------------
+Date: 23/5/2024
+Time: 21:59
+Phone Number: +4567891231
+Message: Jack: Deposit: 200.0Jack: Withdrawal: 39.0
+--------------------
