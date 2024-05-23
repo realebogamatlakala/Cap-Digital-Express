@@ -26,6 +26,7 @@ def send_sms_notification(recipient_number, message_text):
 
 master = Tk()
 master.title('Banking App')
+master.configure(bg='DeepSkyBlue4')
 
 
 def finish_reg():
@@ -100,15 +101,16 @@ def register():
     # Register Screen
     register_screen = Toplevel(master)
     register_screen.title('Register')
+    register_screen.configure(bg='DeepSkyBlue4')
 
     # Labels
-    Label(register_screen, text="Please enter your details below to register", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
-    Label(register_screen, text="Name", font=('Calibri', 12)).grid(row=1, sticky=W)
-    Label(register_screen, text="Age", font=('Calibri', 12)).grid(row=2, sticky=W)
-    Label(register_screen, text="Gender", font=('Calibri', 12)).grid(row=3, sticky=W)
-    Label(register_screen, text="Cellphone", font =('Calibri', 12)).grid(row=4,sticky=W)
-    Label(register_screen, text="Account No", font=('Calibri', 12)).grid(row=5, sticky=W)
-    Label(register_screen, text="Password", font=('Calibri', 12)).grid(row=6, sticky=W)
+    Label(register_screen, text="Please enter your details below to register", font=('Calibri', 12)).grid(row=0, sticky=N, pady=2)
+    Label(register_screen, text="Username", font=('Calibri', 12),).grid(row=1, sticky=W, pady=2)
+    Label(register_screen, text="Age", font=('Calibri', 12)).grid(row=2, sticky=W, pady=2)
+    Label(register_screen, text="Gender", font=('Calibri', 12)).grid(row=3, sticky=W, pady=2)
+    Label(register_screen, text="Cellphone", font =('Calibri', 12)).grid(row=4,sticky=W, pady=2)
+    Label(register_screen, text="Account No", font=('Calibri', 12)).grid(row=5, sticky=W, pady=2)
+    Label(register_screen, text="Password", font=('Calibri', 12)).grid(row=6, sticky=W, pady=2)
     notif = Label(register_screen, font=('Calibri', 12))
     notif.grid(row=7, sticky=N, pady=10)
 
@@ -144,7 +146,7 @@ def login_session():
     login_password = temp_login_password.get()
 
     # Ensure login_notif is defined at the correct place
-    login_notif = Label(login_screen, font=('Calibri', 12))  # Define the login_notif variable
+    login_notif = Label(login_screen, font=('Calibri', 12), bg='DeepSkyBlue4') # Define the login_notif variable
     login_notif.grid(row=5, columnspan=2, pady=10)  # Place the label in the grid
 
     for name in all_accounts:
@@ -159,6 +161,7 @@ def login_session():
                 login_screen.destroy()
                 account_dashboard = Toplevel(master)
                 account_dashboard.title('Dashboard')
+                account_dashboard.configure(bg='DeepSkyBlue4')
                 # Labels
                 Label(account_dashboard, text="Account Dashboard", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10, padx=150) 
                 Label(account_dashboard, text="Welcome " + name + "\n\nWould you like to make a transaction?", font=('Calibri', 12)).grid(row=2, sticky=N, pady=5, padx=150)
@@ -168,7 +171,7 @@ def login_session():
                     user_image = Image.open(user_image_path)
                     user_image = user_image.resize((150, 150))
                     user_image = ImageTk.PhotoImage(user_image)
-                    Label(account_dashboard, image=user_image).grid(row=1, sticky=N, pady=5)
+                    Label(account_dashboard, image=user_image, bg='DeepSkyBlue4').grid(row=1, sticky=N, pady=5)
                     # Keep a reference to the image object to prevent garbage collection
                     account_dashboard.image = user_image
                 # Buttons
@@ -199,6 +202,7 @@ def view_transactions(username):
     # Create a new window for displaying transactions
     transactions_window = Toplevel(master)
     transactions_window.title('Transactions History')
+    transactions_window.configure(bg='DeepSkyBlue4')
 
     # Display user's details and balance
     Label(transactions_window, text=f"Username: {username}", font=('Calibri', 12)).grid(row=0, columnspan=2, sticky=W, padx=10, pady=5)
@@ -245,11 +249,16 @@ def send_to_whatsapp(username, transactions):
         messagebox.showinfo("Success", "Transaction statement sent to your WhatsApp.")
     except Exception as e:
         messagebox.showerror("Error", str(e))
+        
+def logout():
+    master.destroy()  # Close the main window (master)
+    
 def transaction_screen():
     global temp_account_holder, temp_transaction, temp_transaction_amount, notif
     # Create a new Toplevel window for the transaction screen
     transaction_screen = Toplevel(master)
     transaction_screen.title('Transactions')
+    transaction_screen.configure(bg='DeepSkyBlue4')
   
 
     # Labels
@@ -261,6 +270,7 @@ def transaction_screen():
     Button(transaction_screen, text="Deposit", font=('Calibri', 12), width=30, command=deposit).grid(row=3, sticky=N, padx=150)
     Button(transaction_screen, text="Withdraw", font=('Calibri', 12), width=30, command=withdraw).grid(row=4, sticky=N, padx=150)
     Button(transaction_screen, text="View Transactions", font=('Calibri', 12), command=lambda: view_transactions(login_name)).grid(row=5, pady=10)
+    Button(transaction_screen, text="Logout", width=18, command=logout, font=('Calibri', 12)).grid(row=6, sticky=N, pady=5)
 
 def personal_details():
     # Vars
@@ -277,6 +287,7 @@ def personal_details():
     # Personal details screen
     personal_details_screen = Toplevel(master)
     personal_details_screen.title('Personal Details')
+    personal_details_screen.configure(bg='DeepSkyBlue4')
 
     # Labels
     Label(personal_details_screen, text="Personal Details", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
@@ -343,6 +354,7 @@ def deposit():
 
     deposit_screen = Toplevel(master)
     deposit_screen.title("Deposit")
+    deposit_screen.configure(bg='DeepSkyBlue4')
     
     # Labels and Entry
     Label(deposit_screen, text="Current Balance:").grid(row=0, column=0, padx=10, pady=5)
@@ -412,6 +424,7 @@ def withdraw():
     
     withdrawal_screen = Toplevel(master)
     withdrawal_screen.title("Withdrawal")
+    withdrawal_screen.configure(bg='DeepSkyBlue4') 
     
     Label(withdrawal_screen, text="Current Balance:" ).grid(row=0, column=0, padx=10, pady=5)
     current_balance_label = Label(withdrawal_screen, text=f"R{balance}")
@@ -433,11 +446,12 @@ def login_screen():
     global login_screen
     login_screen = Toplevel(master)
     login_screen.title('Login')
+    login_screen.configure(bg='DeepSkyBlue4')
 
     # Labels
     Label(login_screen, text="Login", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
-    Label(login_screen, text="Username", font=('Calibri', 12)).grid(row=1, sticky=W)
-    Label(login_screen, text="Password", font=('Calibri', 12)).grid(row=2, sticky=W)
+    Label(login_screen, text="Username", font=('Calibri', 12)).grid(row=1, sticky=W, pady=2)
+    Label(login_screen, text="Password", font=('Calibri', 12)).grid(row=2, sticky=W, pady=2)
 
     # Entries
     global temp_login_name
@@ -465,8 +479,8 @@ img = img.resize((150,150))
 img = ImageTk.PhotoImage(img)
 
 # Labels
-Label(master, text = "Cap-Digital-Express", font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
-Label(master, text = "Bank Better with CDE Bank! \n The most secure bank in the southern hemisphere!", font=('Calibri',12)).grid(row=1,sticky=N)
+Label(master, text = "Transact Bank", font=('Calibri',20)).grid(row=0,sticky=N,pady=10)
+Label(master, text = "Bank Better with Transact Bank! \n The most secure bank in the southern hemisphere!", font=('Calibri',12)).grid(row=1,sticky=N)
 Label(master, image=img).grid(row=2,sticky=N,pady=15)
 
 # Buttons
