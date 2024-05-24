@@ -112,3 +112,6 @@ Bukho: Deposit: 100.0
 Bukho: Withdrawal: 200.0
 Mbasa: Deposit: 2000.0
 Mbasa: Withdrawal: 1000.0
+Sam: Deposit: 200.0
+Jack: Deposit: 200.0
+Jack: Withdrawal: 39.0
