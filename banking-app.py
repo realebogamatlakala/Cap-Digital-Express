@@ -217,8 +217,8 @@ def login_session():
                 account_dashboard.title('Dashboard')
                 account_dashboard.configure(bg='DeepSkyBlue4')
                 # Labels
-                Label(account_dashboard, text="Account Dashboard", font=('Calibri', 14, 'bold')).grid(row=0, sticky=N, pady=10, padx=150) 
-                Label(account_dashboard, text="Welcome " + name + "\n\nWould you like to make a transaction?", font=('Calibri', 12, 'bold')).grid(row=2, sticky=N, pady=5, padx=150)
+                Label(account_dashboard, text="Account Dashboard", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=0, sticky=N, pady=10, padx=150) 
+                Label(account_dashboard, text=f"Welcome {name}\n\nWould you like to make a transaction?", font=('Calibri', 12, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=2, sticky=N, pady=5, padx=150)
                 # Display user image
                 user_image_path = file_data[6]  # Image path is stored in the 7th line
                 if os.path.exists(user_image_path):
@@ -226,11 +226,11 @@ def login_session():
                     user_image = user_image.resize((150, 150))
                     user_image = ImageTk.PhotoImage(user_image)
                     Label(account_dashboard, image=user_image, bg='DeepSkyBlue4').grid(row=1, sticky=N, pady=5)
-                    # Keep a reference to the image object to prevent garbage collection
+                
                     account_dashboard.image = user_image
                 # Buttons
-                Button(account_dashboard, text="Yes", width=20, command=transaction_screen, font=('Calibri', 12)).grid(row=3, sticky=N, pady=5)
-                Button(account_dashboard, text="No", width=20, command=account_dashboard.destroy, font=('Calibri', 12)).grid(row=4, sticky=N, pady=10, padx=15)
+                Button(account_dashboard, text="Yes", width=20, command=transaction_screen, font=('Calibri', 12, 'bold'), fg='white', bg='RoyalBlue3').grid(row=3, column=0, sticky=E, pady=5, padx=150)
+                Button(account_dashboard, text="No", width=20, command=account_dashboard.destroy, font=('Calibri', 12, 'bold'), fg='white', bg='RoyalBlue3').grid(row=3, column=0, sticky=W, pady=5, padx=150)
                 send_sms_notification(cellphone, f"Login successful for {name}.")
                 return
             else:
@@ -243,12 +243,12 @@ def view_transactions(username):
         with open(username, "r") as file:
             user_data = file.readlines()
             account_no = user_data[5].strip()
-            balance = user_data[7].strip()  # Get balance from the second from last line
-        transactions = []  # Initialize an empty list to store transactions
+            balance = user_data[7].strip()  
+        transactions = []  
         with open("TransactionLog.txt", "r") as file:
             for line in file:
                 if line.startswith(username):
-                    transactions.append(line.strip())  # Append transactions of the user
+                    transactions.append(line.strip()) 
     except FileNotFoundError:
         messagebox.showerror("Error", "Transaction log file not found.")
         return
@@ -308,63 +308,53 @@ def logout():
     master.destroy()  # Close the main window (master)
     
 def pay_someone():
-    # Create a new Toplevel window for the pay someone screen
     pay_screen = Toplevel(master)
     pay_screen.title('Pay Someone')
     pay_screen.configure(bg='DeepSkyBlue4')
 
-    # Labels and Entry for recipient details
-    Label(pay_screen, text="Recipient Name:", font=('Calibri', 12)).grid(row=0, sticky=W, padx=20, pady=5)
-    recipient_name_entry = Entry(pay_screen)
-    recipient_name_entry.grid(row=0, column=1, padx=20, pady=5)
+    Label(pay_screen, text="Recipient Name:", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=0, sticky=W, padx=20, pady=10)
+    recipient_name_entry = Entry(pay_screen, font=('Calibri', 14))
+    recipient_name_entry.grid(row=0, column=1, padx=20, pady=10)
 
-    Label(pay_screen, text="Recipient Account No:", font=('Calibri', 12)).grid(row=1, sticky=W, padx=20, pady=5)
-    recipient_account_entry = Entry(pay_screen)
-    recipient_account_entry.grid(row=1, column=1, padx=20, pady=5)
+    Label(pay_screen, text="Recipient Account No:", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=1, sticky=W, padx=20, pady=10)
+    recipient_account_entry = Entry(pay_screen, font=('Calibri', 14))
+    recipient_account_entry.grid(row=1, column=1, padx=20, pady=10)
 
-    Label(pay_screen, text="Amount to Transfer (R):", font=('Calibri', 12)).grid(row=2, sticky=W, padx=20, pady=5)
-    transfer_amount_entry = Entry(pay_screen)
-    transfer_amount_entry.grid(row=2, column=1, padx=20, pady=5)
+    Label(pay_screen, text="Amount to Transfer (R):", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=2, sticky=W, padx=20, pady=10)
+    transfer_amount_entry = Entry(pay_screen, font=('Calibri', 14))
+    transfer_amount_entry.grid(row=2, column=1, padx=20, pady=10)
 
-    # Function to handle the transfer
     def transfer_funds():
         recipient_name = recipient_name_entry.get()
         recipient_account = recipient_account_entry.get()
         transfer_amount = transfer_amount_entry.get()
         messagebox.showinfo("Success", "Transfer successful")
 
-        # Perform necessary validation checks on the recipient details and transfer amount
+       
+    Button(pay_screen, text="Transfer", command=transfer_funds, font=('Calibri', 14, 'bold'), fg='white', bg='RoyalBlue3').grid(row=3, columnspan=2, pady=20)
 
-        # Deduct the transfer amount from the user's balance
-        # Update the recipient's account balance
 
-        # Log the transaction in the transaction log
-
-        # Display a success message or handle any errors
-
-    # Button to perform the transfer
-    Button(pay_screen, text="Transfer", command=transfer_funds, font=('Calibri', 12, 'bold')).grid(row=3, columnspan=2, pady=20)
 
     
 def transaction_screen():
     global temp_account_holder, temp_transaction, temp_transaction_amount, notif
-    # Create a new Toplevel window for the transaction screen
+  
     transaction_screen = Toplevel(master)
     transaction_screen.title('Transactions')
     transaction_screen.configure(bg='DeepSkyBlue4')
-  
 
     # Labels
-    Label(transaction_screen, text="Transaction Menu", font=('Calibri', 14, 'bold')).grid(row=0, sticky=N, pady=10, padx=150)
-    Label(transaction_screen, text="Please select an option:", font=('Calibri', 12)).grid(row=1, sticky=N, pady=5, padx=150)
+    Label(transaction_screen, text="Transaction Menu", font=('Calibri', 14, 'bold')).grid(row=0, column=0, columnspan=2, sticky=N, pady=10, padx=150)
+    Label(transaction_screen, text="Please select an option:", font=('Calibri', 12)).grid(row=1, column=0, columnspan=2, sticky=N, pady=5, padx=150)
 
     # Buttons
-    Button(transaction_screen, text="Personal Details", font=('Calibri', 12), width=30, command=personal_details).grid(row=2, sticky=N, padx=150)
-    Button(transaction_screen, text="Deposit", font=('Calibri', 12), width=30, command=deposit).grid(row=3, sticky=N, padx=150)
-    Button(transaction_screen, text="Withdraw", font=('Calibri', 12), width=30, command=withdraw).grid(row=4, sticky=N, padx=150)
-    Button(transaction_screen, text="Pay Someone", font=('Calibri', 12), width=25, command=pay_someone).grid(row=6, sticky=N, padx=150, pady=3)
-    Button(transaction_screen, text="View Transactions", font=('Calibri', 12), command=lambda: view_transactions(login_name)).grid(row=5, pady=8)
-    Button(transaction_screen, text="Logout", width=18, command=logout, font=('Calibri', 12, 'bold')).grid(row=6, sticky=N, pady=40)
+    Button(transaction_screen, text="Personal Details", font=('Calibri', 12), width=30, command=personal_details).grid(row=2, column=0, padx=10, pady=5)
+    Button(transaction_screen, text="Deposit", font=('Calibri', 12), width=30, command=deposit).grid(row=2, column=1, padx=10, pady=5)
+    Button(transaction_screen, text="Withdraw", font=('Calibri', 12), width=30, command=withdraw).grid(row=3, column=0, padx=10, pady=5)
+    Button(transaction_screen, text="Pay Someone", font=('Calibri', 12), width=30, command=pay_someone).grid(row=3, column=1, padx=10, pady=5)
+    Button(transaction_screen, text="View Transactions", font=('Calibri', 12), width=30, command=lambda: view_transactions(login_name)).grid(row=4, column=0, padx=10, pady=5)
+    Button(transaction_screen, text="Logout", font=('Calibri', 12, 'bold'), width=30, command=logout).grid(row=4, column=1, padx=10, pady=5)
+
 
 def personal_details():
     # Vars
@@ -378,39 +368,45 @@ def personal_details():
     image_path = user_details[6].strip()
     details_balance = user_details[7].strip()
     
-    # Personal details screen
+   
     personal_details_screen = Toplevel(master)
     personal_details_screen.title('Personal Details')
     personal_details_screen.configure(bg='DeepSkyBlue4')
 
-    # Labels
-    Label(personal_details_screen, text="Personal Details", font=('Calibri', 14, 'bold')).grid(row=0, sticky=N, pady=5, padx=100)
-    Label(personal_details_screen, text="Name: " + details_name, font=('Calibri', 12)).grid(row=2, sticky=W, padx=100, pady=5)
-    Label(personal_details_screen, text="Account No:" + account_no, font=('Calibri', 12)).grid(row=3, sticky=W, padx=100, pady=5)
-    Label(personal_details_screen, text="Age: " + details_age, font=('Calibri', 12)).grid(row=4, sticky=W, padx=100, pady=5)
-    Label(personal_details_screen, text="Gender: " + details_gender, font=('Calibri', 12)).grid(row=5, sticky=W, padx=100, pady=5)
-    Label(personal_details_screen, text=f"Balance: R {details_balance}", font=('Calibri', 12)).grid(row=6, sticky=W, padx=100, pady=5)
+    
+    Label(personal_details_screen, text="Personal Details", font=('Calibri', 16, 'bold'), bg='DeepSkyBlue4', fg='white').grid(row=0, columnspan=2, pady=10)
     if os.path.exists(image_path):
         user_image = Image.open(image_path)
         user_image = user_image.resize((150, 150))
         user_image = ImageTk.PhotoImage(user_image)
-        Label(personal_details_screen, image=user_image).grid(row=1, sticky=N, pady=5)
-        # Keep a reference to the image object to prevent garbage collection
+        Label(personal_details_screen, image=user_image, bg='DeepSkyBlue4').grid(row=1, columnspan=2, pady=10)
+       
         personal_details_screen.image = user_image
-    
-    
- 
+
+    Label(personal_details_screen, text="Name:", font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=2, column=0, sticky=W, padx=20, pady=5)
+    Label(personal_details_screen, text=details_name, font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=2, column=1, sticky=W, padx=20, pady=5)
+
+    Label(personal_details_screen, text="Account No:", font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=3, column=0, sticky=W, padx=20, pady=5)
+    Label(personal_details_screen, text=account_no, font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=3, column=1, sticky=W, padx=20, pady=5)
+
+    Label(personal_details_screen, text="Age:", font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=4, column=0, sticky=W, padx=20, pady=5)
+    Label(personal_details_screen, text=details_age, font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=4, column=1, sticky=W, padx=20, pady=5)
+
+    Label(personal_details_screen, text="Gender:", font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=5, column=0, sticky=W, padx=20, pady=5)
+    Label(personal_details_screen, text=details_gender, font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=5, column=1, sticky=W, padx=20, pady=5)
+
+    Label(personal_details_screen, text=f"Balance: R {details_balance}", font=('Calibri', 14), bg='DeepSkyBlue4', fg='white').grid(row=6, columnspan=2, sticky=W, padx=20, pady=5)
+
 
 def deposit():
    
-    # Retrieve the current balance when opening the deposit screen
     file = open(login_name, 'r')
     user_data = file.readlines()
     cellphone = user_data[4]
-    balance = float(user_data[7].strip())  # Get balance from the seventh line and strip any extra spaces or newline characters
+    balance = float(user_data[7].strip())  
     file.close()
     
-    # Function to handle deposit
+  
     def finish_deposit():
         deposit_input = deposit_entry.get()
         if not deposit_input:
@@ -425,13 +421,13 @@ def deposit():
             deposit_notif.config(fg="red", text="Invalid input. Please enter a valid amount.")
             return
         
-        # Proceed with the deposit operation
+       
         file = open(login_name, 'r+')
         user_data = file.readlines()
-        balance = float(user_data[7])  # Get balance from the last line
+        balance = float(user_data[7]) 
         new_balance = balance + deposit_amount
         
-        # Update balance in user's file
+        
         user_data[7] = str(new_balance) + '\n'
         file.seek(0)
         file.writelines(user_data)
@@ -441,7 +437,7 @@ def deposit():
         with open("TransactionLog.txt", "a") as log_file:
             log_file.write(f"{login_name}: Deposit: {deposit_amount}\n")
         
-        deposit_notif.config(fg="green", text=(f"Deposit successful. New Balance: R{new_balance}"))
+        deposit_notif.config(fg="green", text=f"Deposit successful. New Balance: R{new_balance}")
         current_balance_label.config(text=f"R{new_balance}")
         send_sms_notification(cellphone, f"R {deposit_amount} deposited successfully into your account. New balance is R {balance}.")
        
@@ -451,26 +447,25 @@ def deposit():
     deposit_screen.configure(bg='DeepSkyBlue4')
     
     # Labels and Entry
-    Label(deposit_screen, text="Current Balance:").grid(row=0, column=0, padx=10, pady=5)
-    current_balance_label = Label(deposit_screen, text=f"R{balance}")
-    current_balance_label.grid(row=0, column=1, padx=10, pady=5)
+    Label(deposit_screen, text="Current Balance:", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=0, column=0, padx=10, pady=10, sticky=W)
+    current_balance_label = Label(deposit_screen, text=f"R{balance}", font=('Calibri', 14), fg='white', bg='DeepSkyBlue4')
+    current_balance_label.grid(row=0, column=1, padx=10, pady=10, sticky=E)
     
-    Label(deposit_screen, text="How much would you like to deposit:").grid(row=1, column=0, padx=10, pady=5)
-    deposit_entry = Entry(deposit_screen)
-    deposit_entry.grid(row=1, column=1, padx=10, pady=5)
+    Label(deposit_screen, text="How much would you like to deposit:", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=1, column=0, padx=10, pady=10, sticky=W)
+    deposit_entry = Entry(deposit_screen, font=('Calibri', 14))
+    deposit_entry.grid(row=1, column=1, padx=10, pady=10, sticky=E)
     
     # Button and Notification Label
-    Button(deposit_screen, text="Deposit", command=finish_deposit).grid(row=2, column=0, columnspan=2, padx=10, pady=5)
-    deposit_notif = Label(deposit_screen, font=('Calibri', 12))
-    deposit_notif.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
+    Button(deposit_screen, text="Deposit", font=('Calibri', 14, 'bold'), fg='white', bg='RoyalBlue3', command=finish_deposit).grid(row=2, column=0, columnspan=2, padx=10, pady=20)
+    deposit_notif = Label(deposit_screen, font=('Calibri', 12), bg='DeepSkyBlue4')
+    deposit_notif.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
-   
 
 def withdraw():
     file = open(login_name, 'r')
     user_data = file.readlines()
     cellphone = user_data[4]
-    balance = float(user_data[7].strip())  # Get balance from the seventh line and strip any extra spaces or newline characters
+    balance = float(user_data[7].strip()) 
     file.close()
     
     # Function to handle withdrawal
@@ -488,10 +483,10 @@ def withdraw():
             withdrawal_notif.config(fg="red", text="Invalid input. Please enter a valid amount.")
             return
         
-        # Proceed with the withdrawal operation
+        
         file = open(login_name, 'r+')
         user_data = file.readlines()
-        balance = float(user_data[7])  # Get balance from the last line
+        balance = float(user_data[7]) 
         
         if withdrawal_amount > balance:
             withdrawal_notif.config(fg="red", text="Insufficient funds.")
@@ -500,40 +495,36 @@ def withdraw():
         
         new_balance = balance - withdrawal_amount
         
-        # Update balance in user's file
+       
         user_data[7] = str(new_balance) + '\n'
         file.seek(0)
         file.writelines(user_data)
         file.close()
         
-        # Log withdrawal transaction
+       
         with open("TransactionLog.txt", "a") as log_file:
             log_file.write(f"{login_name}: Withdrawal: {withdrawal_amount}\n")
         
-        withdrawal_notif.config(fg="green", text=(f"Withdrawal successful. New Balance: R{new_balance}"))
+        withdrawal_notif.config(fg="green", text=f"Withdrawal successful. New Balance: R{new_balance}")
         current_balance_label.config(text=f"R{new_balance}")
-        send_sms_notification(cellphone, f"R {withdrawal_amount} withdrawn successfully from your account. New balance is R {balance}.")
+        send_sms_notification(cellphone, f"R {withdrawal_amount} withdrawn successfully from your account. New balance is R {new_balance}.")
         
-
-    
     withdrawal_screen = Toplevel(master)
     withdrawal_screen.title("Withdrawal")
     withdrawal_screen.configure(bg='DeepSkyBlue4') 
     
-    Label(withdrawal_screen, text="Current Balance:" ).grid(row=0, column=0, padx=10, pady=5)
-    current_balance_label = Label(withdrawal_screen, text=f"R{balance}")
-    current_balance_label.grid(row=0, column=1, padx=10, pady=5)
-
-    # Labels and Entry
-    Label(withdrawal_screen, text="How much would you like to withdraw:").grid(row=1, column=0, padx=10, pady=5)
-    withdrawal_entry = Entry(withdrawal_screen)
-    withdrawal_entry.grid(row=1, column=1, padx=10, pady=5)
+    Label(withdrawal_screen, text="Current Balance:", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=0, column=0, padx=10, pady=10, sticky=W)
+    current_balance_label = Label(withdrawal_screen, text=f"R{balance}", font=('Calibri', 14), fg='white', bg='DeepSkyBlue4')
+    current_balance_label.grid(row=0, column=1, padx=10, pady=10, sticky=E)
+    
+    Label(withdrawal_screen, text="How much would you like to withdraw:", font=('Calibri', 14, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=1, column=0, padx=10, pady=10, sticky=W)
+    withdrawal_entry = Entry(withdrawal_screen, font=('Calibri', 14))
+    withdrawal_entry.grid(row=1, column=1, padx=10, pady=10, sticky=E)
     
     # Button and Notification Label
-    Button(withdrawal_screen, text="Withdraw", command=finish_withdrawal).grid(row=2, column=0, columnspan=2, padx=10, pady=5)
-    withdrawal_notif = Label(withdrawal_screen, font=('Calibri',12))
-    withdrawal_notif.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
-
+    Button(withdrawal_screen, text="Withdraw", font=('Calibri', 14, 'bold'), fg='white', bg='RoyalBlue3', command=finish_withdrawal).grid(row=2, column=0, columnspan=2, padx=10, pady=20)
+    withdrawal_notif = Label(withdrawal_screen, font=('Calibri', 12), bg='DeepSkyBlue4')
+    withdrawal_notif.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
 
 def login_screen():
@@ -543,47 +534,48 @@ def login_screen():
     login_screen.configure(bg='DeepSkyBlue4')
 
     # Labels
-    Label(login_screen, text="Login", font=('Calibri', 12, 'bold')).grid(row=0, sticky=N, pady=5, padx=17)
-    Label(login_screen, text="Username", font=('Calibri', 12)).grid(row=1, sticky=W, pady=2, padx=15)
-    Label(login_screen, text="Password", font=('Calibri', 12)).grid(row=2, sticky=W, pady=2, padx=15)
+    Label(login_screen, text="Login", font=('Calibri', 16, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=0, sticky=N, pady=10, padx=20)
+    Label(login_screen, text="Username", font=('Calibri', 14), fg='white', bg='DeepSkyBlue4').grid(row=1, sticky=W, pady=5, padx=20)
+    Label(login_screen, text="Password", font=('Calibri', 14), fg='white', bg='DeepSkyBlue4').grid(row=2, sticky=W, pady=5, padx=20)
 
     # Entries
     global temp_login_name
     temp_login_name = StringVar()
-    Entry(login_screen, textvariable=temp_login_name).grid(row=1, column=1, padx=30)
+    Entry(login_screen, textvariable=temp_login_name, font=('Calibri', 14)).grid(row=1, column=1, padx=20, pady=5)
     global temp_login_password
     temp_login_password = StringVar()
-    password_entry = Entry(login_screen, textvariable=temp_login_password, show="*")
-    password_entry.grid(row=2, column=1, padx=30)
+    password_entry = Entry(login_screen, textvariable=temp_login_password, show="*", font=('Calibri', 14))
+    password_entry.grid(row=2, column=1, padx=20, pady=5)
 
     # Show password checkbox
     show_password_var = BooleanVar()
-    show_password_checkbox = Checkbutton(login_screen, text="Show Password", variable=show_password_var, command=lambda: toggle_password_visibility(password_entry, show_password_var))
-    show_password_checkbox.grid(row=3, columnspan=2, pady=6)
+    show_password_checkbox = Checkbutton(login_screen, text="Show Password", variable=show_password_var, command=lambda: toggle_password_visibility(password_entry, show_password_var), font=('Calibri', 12), fg='white', bg='DeepSkyBlue4')
+    show_password_checkbox.grid(row=3, columnspan=2, pady=5)
 
     # Buttons
-    Button(login_screen, text="Login", command=login_session, font=('Calibri', 12, 'bold'), width=15).grid(row=4, columnspan=2, sticky=N, pady=10)
+    Button(login_screen, text="Login", command=login_session, font=('Calibri', 12, 'bold'), width=15, fg='white', bg='RoyalBlue3').grid(row=4, columnspan=2, sticky=N, pady=10)
 
 def toggle_password_visibility(password_entry, show_password_var):
     show_password = show_password_var.get()
     password_entry.config(show="" if show_password else "*")
+
 # Image import
 img = Image.open('secure.png')
-img = img.resize((150,150))
+img = img.resize((150, 150))
 img = ImageTk.PhotoImage(img)
 
 # Labels
-Label(master, text = "Transact Bank", font=('Calibri',22, 'bold')).grid(row=0,sticky=N,pady=10)
-Label(master, text = "Bank Better with Transact Bank! \n The most secure bank in the southern hemisphere!", font=('Calibri',15)).grid(row=1,sticky=N, padx=15)
-Label(master, image=img).grid(row=2,sticky=N,pady=15)
+Label(master, text="Transact Bank", font=('Calibri', 22, 'bold'), fg='DeepSkyBlue4').grid(row=0, sticky=N, pady=10)
+Label(master, text="Bank Better with Transact Bank! \n The most secure bank in the southern hemisphere!", font=('Calibri', 15)).grid(row=1, sticky=N, padx=15)
+Label(master, image=img).grid(row=2, sticky=N, pady=15)
 
 # Buttons
-Button(master, text="Register", font=('Calibri',12, 'bold'),width=20,command=register).grid(row=3,sticky=N)
-Button(master, text="Login", font=('Calibri',12, 'bold'),width=20,command=login_screen).grid(row=4,sticky=N,pady=10)
+Button(master, text="Register", font=('Calibri', 12, 'bold'), width=20, command=register, fg='white', bg='RoyalBlue3').grid(row=3, sticky=N, pady=5)
+Button(master, text="Login", font=('Calibri', 12, 'bold'), width=20, command=login_screen, fg='white', bg='RoyalBlue3').grid(row=4, sticky=N, pady=10)
 
 # Footer
 footer_text = "Contact the Transact Bank Tech Team for any issues relating to the app on 0861 084 567."
-Label(master, text=footer_text, font=('Calibri', 12, 'bold'), bg='DeepSkyBlue4').grid(row=10, sticky=S, pady=20, columnspan=2)
+Label(master, text=footer_text, font=('Calibri', 12, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=10, sticky=S, pady=20, columnspan=2)
 
 master.mainloop()
 
