@@ -115,3 +115,5 @@ Mbasa: Withdrawal: 1000.0
 Sam: Deposit: 200.0
 Jack: Deposit: 200.0
 Jack: Withdrawal: 39.0
+gg: Deposit: 500.0
+gg: Withdrawal: 500.0
