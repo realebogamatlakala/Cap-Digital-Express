@@ -7,6 +7,8 @@ import string
 import requests
 import pywhatkit
 import shutil
+from tkinter import filedialog
+from tkinter.ttk import Combobox
 
 # Function to send SMS notification
 def send_sms_notification(recipient_number, message_text):
@@ -132,6 +134,7 @@ def generate_password():
     password_characters = uppercase_letters + lowercase_letters + digits + special_characters
     return ''.join(random.choices(password_characters, k=12))
 
+
 def register():
     # Vars
     global temp_name, temp_age, temp_gender, temp_cellphone, temp_password, notif, account_entry, password_entry, image_entry
@@ -148,44 +151,57 @@ def register():
     register_screen.configure(bg='DeepSkyBlue4')
 
     # Labels
-    Label(register_screen, text="Please enter your details below to register", font=('Calibri', 12, 'bold')).grid(row=0, sticky=N, pady=5, padx=40)
-    Label(register_screen, text="Username", font=('Calibri', 12),).grid(row=1, sticky=W, pady=2, padx=20)
-    Label(register_screen, text="Age", font=('Calibri', 12)).grid(row=2, sticky=W, pady=2, padx=20)
-    Label(register_screen, text="Gender", font=('Calibri', 12)).grid(row=3, sticky=W, pady=2, padx=20)
-    Label(register_screen, text="Cellphone", font =('Calibri', 12)).grid(row=4,sticky=W, pady=2, padx=20)
-    Label(register_screen, text="Account No", font=('Calibri', 12)).grid(row=5, sticky=W, pady=2, padx=20)
-    Label(register_screen, text="Password", font=('Calibri', 12)).grid(row=6, sticky=W, pady=2, padx=20)
-    notif = Label(register_screen, font=('Calibri', 12))
+    Label(register_screen, text="Please enter your details below to register", font=('Calibri', 12, 'bold'), fg='white', bg='DeepSkyBlue4').grid(row=0, sticky=N, pady=5, padx=40)
+    Label(register_screen, text="Username", font=('Calibri', 12), fg='white', bg='DeepSkyBlue4').grid(row=1, sticky=W, pady=2, padx=20)
+    Label(register_screen, text="Age", font=('Calibri', 12), fg='white', bg='DeepSkyBlue4').grid(row=2, sticky=W, pady=2, padx=20)
+    Label(register_screen, text="Gender", font=('Calibri', 12), fg='white', bg='DeepSkyBlue4').grid(row=3, sticky=W, pady=2, padx=20)
+    Label(register_screen, text="Cellphone", font=('Calibri', 12), fg='white', bg='DeepSkyBlue4').grid(row=4, sticky=W, pady=2, padx=20)
+    Label(register_screen, text="Account No", font=('Calibri', 12), fg='white', bg='DeepSkyBlue4').grid(row=5, sticky=W, pady=2, padx=20)
+    Label(register_screen, text="Password", font=('Calibri', 12), fg='white', bg='DeepSkyBlue4').grid(row=6, sticky=W, pady=2, padx=20)
+    notif = Label(register_screen, font=('Calibri', 12), fg='white', bg='DeepSkyBlue4')
     notif.grid(row=7, sticky=N, pady=10)
 
     # Entries
-    Entry(register_screen, textvariable=temp_name).grid(row=1, column=0, padx=30)
-    Entry(register_screen, textvariable=temp_age).grid(row=2, column=0, padx=30)
+    Entry(register_screen, textvariable=temp_name).grid(row=1, column=1, padx=30)
+    Entry(register_screen, textvariable=temp_age).grid(row=2, column=1, padx=30)
     
     # Bind age entry to check_age function
     temp_age.trace("w", check_age)
-    
-     # Gender dropdown
-    temp_gender.set("Select")  # Default value
+
+    # Gender dropdown
     gender_options = ["Male", "Female", "Other"]
-    gender_menu = OptionMenu(register_screen, temp_gender, *gender_options)
-    gender_menu.grid(row=3, column=1, padx=5)
-    
-    Entry(register_screen, textvariable=temp_gender).grid(row=3, column=0, padx=30)
-    Entry(register_screen, textvariable=temp_cellphone).grid(row=4, column=0, padx=30)
+    gender_combobox = Combobox(register_screen, textvariable=temp_gender, values=gender_options, state="readonly")
+    gender_combobox.grid(row=3, column=1, padx=30)
+    gender_combobox.set("Select")  # Default value
+
+    Entry(register_screen, textvariable=temp_cellphone).grid(row=4, column=1, padx=30)
     account_entry = Entry(register_screen)
-    account_entry.grid(row=5, column=0, padx=30)
-    password_entry = Entry(register_screen, textvariable=temp_password, show="")
-    password_entry.grid(row=6, column=0, padx=30)
+    account_entry.grid(row=5, column=1, padx=30)
+    password_entry = Entry(register_screen, textvariable=temp_password, show="*")
+    password_entry.grid(row=6, column=1, padx=30)
 
     # Image upload entry and button
     image_entry = Entry(register_screen)  # Initialize the image entry variable
     image_entry.grid(row=8, column=0, padx=30, pady=5)
-    upload_button = Button(register_screen, text="Upload Image", command=upload_image, font=('Calibri', 10))
+    upload_button = Button(register_screen, text="Upload Image", command=upload_image, font=('Calibri', 10), fg='white', bg='RoyalBlue3')
     upload_button.grid(row=8, column=1, padx=30, pady=5)
 
     # Register button
-    Button(register_screen, text="Register", command=finish_reg, font=('Calibri', 12, 'bold'), width=15).grid(row=9, columnspan=1, sticky=N, pady=10)
+    Button(register_screen, text="Register", command=finish_reg, font=('Calibri', 12, 'bold'), width=15, fg='white', bg='RoyalBlue3').grid(row=9, columnspan=2, sticky=N, pady=10)
+
+def upload_image():
+    global image_entry
+    image_path = filedialog.askopenfilename()  # Open file dialog to select image
+    image_entry.delete(0, END)  # Clear the entry field
+    image_entry.insert(0, image_path)  # Insert the selected image path into the entry field
+
+
+def upload_image():
+    global image_entry
+    image_path = filedialog.askopenfilename()  # Open file dialog to select image
+    image_entry.delete(0, END)  # Clear the entry field
+    image_entry.insert(0, image_path)  # Insert the selected image path into the entry field
+
 
 def upload_image():
     global image_entry
@@ -324,14 +340,33 @@ def pay_someone():
     transfer_amount_entry = Entry(pay_screen, font=('Calibri', 14))
     transfer_amount_entry.grid(row=2, column=1, padx=20, pady=10)
 
-    def transfer_funds():
+    def validate_and_transfer():
         recipient_name = recipient_name_entry.get()
         recipient_account = recipient_account_entry.get()
         transfer_amount = transfer_amount_entry.get()
-        messagebox.showinfo("Success", "Transfer successful")
 
-       
-    Button(pay_screen, text="Transfer", command=transfer_funds, font=('Calibri', 14, 'bold'), fg='white', bg='RoyalBlue3').grid(row=3, columnspan=2, pady=20)
+        if not recipient_name:
+            messagebox.showerror("Input Error", "Please enter the recipient's name.")
+            return
+        if not recipient_account:
+            messagebox.showerror("Input Error", "Please enter the recipient's account number.")
+            return
+        if not transfer_amount:
+            messagebox.showerror("Input Error", "Please enter the amount to transfer.")
+            return
+
+        # Perform the transfer operation
+        transfer_funds(recipient_name, recipient_account, transfer_amount)
+
+    def transfer_funds(recipient_name, recipient_account, transfer_amount):
+        messagebox.showinfo("Success", "Transfer successful")
+        # Additional logic for transferring funds
+        # Deduct the transfer amount from the user's balance
+        # Update the recipient's account balance
+        # Log the transaction in the transaction log
+        # Display a success message or handle any errors
+
+    Button(pay_screen, text="Transfer", command=validate_and_transfer, font=('Calibri', 12, 'bold'), fg='white', bg='RoyalBlue3').grid(row=3, columnspan=2, pady=20)
 
 
 
@@ -406,7 +441,6 @@ def deposit():
     balance = float(user_data[7].strip())  
     file.close()
     
-  
     def finish_deposit():
         deposit_input = deposit_entry.get()
         if not deposit_input:

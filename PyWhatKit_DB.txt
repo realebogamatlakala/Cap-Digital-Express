@@ -38,3 +38,8 @@ Time: 21:59
 Phone Number: +4567891231
 Message: Jack: Deposit: 200.0Jack: Withdrawal: 39.0
 --------------------
+Date: 21/6/2024
+Time: 9:18
+Phone Number: +0998877777
+Message: gg: Deposit: 500.0gg: Withdrawal: 500.0gg: Deposit: 500.0
+--------------------
