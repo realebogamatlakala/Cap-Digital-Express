@@ -118,3 +118,7 @@ Jack: Withdrawal: 39.0
 gg: Deposit: 500.0
 gg: Withdrawal: 500.0
 gg: Deposit: 500.0
+Hlompho: Deposit: 100.0
+Hlompho: Transfer to khanya (97298458): 25.0
+khanya: Received from Hlompho: 25.0
+Hlompho: Withdrawal: 20.0
